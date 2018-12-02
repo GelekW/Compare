@@ -7,13 +7,23 @@
 
 #container {
     color: white;
-        font-family: "Segoe UI", Times, serif;
+    font-family: "Segoe UI", Times, serif;
     border: 6px solid #8367C7;
     border-radius: 10px;
     padding: 8px;
     margin: auto;
     width: 25%;
     text-align: center;
+}
+
+.signin-input {
+    width: 90%;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+.sigin-label {
+    text-align: start;
 }
 
 body {
