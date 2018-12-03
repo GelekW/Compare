@@ -77,6 +77,20 @@
                 }
             }
         }
+
+        public function signin($username, $password) {
+            $sql = "SELECT * FROM Users WHERE userName='$username' AND password='$password';";
+
+            $result = $this->_connection->query($sql);
+
+            if ($result->num_rows == 1) {
+                session_start();
+                $_SESSION['userName'] = $username;
+                return 1;
+            } else {
+                return 0;
+            }
+        }
     
         public function __destruct() {
             $this->_connection->close();

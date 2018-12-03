@@ -1,3 +1,18 @@
+<?php 
+    require_once('database.php');
+    
+    $username = isset ($_POST['username']) ? $_POST['username'] : null;
+    $password = isset ($_POST['password']) ? $_POST['password'] : null;
+
+    $database = new Database("localhost", "root", "", "");
+
+    $status = null;
+
+    if ($username != null && $password != null) {
+        $status = $database->signin($username, $password);
+    }
+?>
+
 <!DOCTYPE html>
 <html>
     <head> 
@@ -8,10 +23,16 @@
         <div>
             <img src=comparelogo.png alt="logo" id="logo">
         </div>
-            <form action="/action_page.php">
+            <form action="/signin.php" method="post">
                 <div id="container">
                     <h1>Sign In</h1>
-                        <p>Please enter your username and password.</p>
+                    <p><?php
+                    if ($status == 0) {
+                        echo "Signin failed! Username or Password is incorrect";
+                    } else {
+                        echo "Please enter your username and password.";
+                    }
+                    ?></p>
 
                     <hr>
                     <label for="username"><b>Username</b></label>
