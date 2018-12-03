@@ -137,15 +137,19 @@
             }
         }
 
-        public function publishStory($title, $category, $mainText) {
+        public function publishStory($username, $title, $category, $mainText) {
             $sql = "INSERT INTO Stories VALUES ('$title', '$category', NOW(), 0, '$mainText');";
 
             $result = $this->_connection->query($sql);
 
-            echo $result;
-
             if ($result === TRUE) {
-                return 2;
+                $sql = "INSERT INTO Wrote VALUES('$username', '$title');";
+                $result = $this->_connection->query($sql);
+                if ($result === TRUE) {
+                    return 2;
+                } else {
+                    return 1;
+                }
             } else {
                 return 1;
             }
