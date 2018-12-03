@@ -1,5 +1,13 @@
 <?php
     class Database {
+        public static function instance() {
+            static $db = null;
+            if ($db === null) {
+                $db = new Database("localhost", "root", "");
+            }
+            return $db;
+        }
+
         private $_connection = null;
     
         public function __construct($host, $userName, $password) {

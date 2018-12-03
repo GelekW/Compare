@@ -4,8 +4,7 @@
     $username = isset ($_POST['username']) ? $_POST['username'] : null;
     $password = isset ($_POST['password']) ? $_POST['password'] : null;
 
-    $database = new Database("localhost", "root", "", "");
-
+    $database = Database::instance();
     $status = null;
 
     if ($username != null && $password != null) {

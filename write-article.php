@@ -1,24 +1,24 @@
 <?php
-if(isset($_SESSION)){
-    $username=$_SESSION("userName");
-    
-}
-else{
-   header("Location: signin.php");
-   exit();
-} 
+    require_once('database.php');
+    session_start();
+    if(isset($_SESSION["userName"])){
+        $username = $_SESSION["userName"];
+    } else {
+        header("Location: signin.php");
+        exit();
+    } 
 ?>
 
 <!DOCTYPE html>
 <html>
 
 <?php
- require_once('database.php');
+
  $articleName = isset ($_POST['articleName']) ? $_POST['articleName'] : null;
  $articleText = isset ($_POST['articleText']) ? $_POST['articleText'] : null;
  $articleCategory = isset ($_POST['articleText']) ? $_POST['articleText'] : null;
  
- $database = new Database("localhost","root","","");
+ $database = Database::instance();
 
  $status = null;
 
