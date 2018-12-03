@@ -24,17 +24,15 @@
     </script>
 </head>
 <body>
-    <div class="container">
-        <span id="top">
-            <img src=logosmall.png alt="logo" id="logosmall">
+    <span id="top">
+            <a href="home.php"><img src=logosmall.png alt="logo" id="logosmall"></a>
             <span id="account">            
                 <p> Hello, <?php 
                 echo $_SESSION['fName'] . " "; 
-                ?>  <button type="button" class="signout" id="signout" name="submit">Sign Out</button></p>
-                <a id="signout" href="write-article.php">Create New Article</a>
-
+                ?>  <a id="signout" href="write-article.php">Create New Article</a> <button type="button" class="signout" id="signout" name="submit">Sign Out</button></p>
             </span>
-        </span> 
+        </span>
+    <div class="container">
         <!-- <div class="articlebox">
                 <p class="likes">likes</p>
                 <a class="articletitle" href="view-article.php">I am an article title blah blah</a> 

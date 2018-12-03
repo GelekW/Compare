@@ -49,6 +49,14 @@
 </head>
 
 <body>
+    <span id="top">
+        <a href="home.php"><img src=logosmall.png alt="logo" id="logosmall"></a>
+        <span id="account">            
+            <p> Hello, <?php 
+            echo $_SESSION['fName'] . " "; 
+            ?>  <a id="signout" href="write-article.php">Create New Article</a> <button type="button" class="signout" id="signout" name="submit">Sign Out</button></p>
+        </span>
+    </span>
     <div id="container">
         
         <form method="POST" action="/write-article.php" id="writingform">
