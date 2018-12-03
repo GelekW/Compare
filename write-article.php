@@ -24,7 +24,7 @@
 
  if($articleName != NULL && $articleText != NULL && $articleCategory != NULL){
     
-    $status=$database->publishStory($articleName,$articleCategory,$articleText);
+    $status=$database->publishStory($username,$articleName,$articleCategory,$articleText);
     
     if($status == 1){
         echo "Article Title is not unique, please choose new Title";
@@ -49,7 +49,7 @@
     <div id="container">
         
         <form method="POST" action="/write-article.php" id="writingform">
-        <p> Article Name: </p> <input type="text" name="articleName">
+        <p> Article Name: </p> <input type="text" name="articleName" maxlength="30">
         <p> Article Category: </p> <input type="text" name="articleCategory">
         <input type="submit">
         </form>
