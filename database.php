@@ -8,6 +8,11 @@
             $_SESSION["userName"] = null;
             $_SESSION = array();
             session_destroy();
+        } else if ($_POST['action'] == 'delete-article' && isset($_POST['article'])) {
+            $article = $_POST['article'];
+            $db = Database::instance();
+
+            $db->deleteStory($article);
         }
     }
 
@@ -38,7 +43,8 @@
             $this->_connection->query("CREATE TABLE IF NOT EXISTS UserComments (
                 id int NOT NULL AUTO_INCREMENT, 
                 comment TEXT NOT NULL, 
-                numOfLikes int, 
+                numOfLikes int,
+                postDate DATETIME NOT NULL, 
                 PRIMARY KEY (id)
                 );
             ");
@@ -128,12 +134,7 @@
                 $results = array();
                 $i = 0;
                 while($row = $result->fetch_assoc()) {
-                    $results[$i] = array();
-                    $results[$i]["title"] = $row["title"];
-                    $results[$i]["category"] = $row["category"];
-                    $results[$i]["publishDate"] = $row["publishDate"];
-                    $results[$i]["numOfLikes"] = $row["numOfLikes"];
-                    $results[$i]["mainText"] = $row["mainText"]; 
+                    $results[$i] = $row;
                     $i++;
                 }
                 return $results;
@@ -143,10 +144,10 @@
         }
 
         public function storyByTitle($title) {
-            $sql = "SELECT * FROM Wrote INNER JOIN Stories ON Wrote.title = stories.title WHERE Stories.title='$title';";
+            $sql = "SELECT * FROM Wrote INNER JOIN Stories ON Wrote.title = Stories.title INNER JOIN Users ON Wrote.userName = Users.userName WHERE Stories.title='$title';";
             $result = $this->_connection->query($sql);
 
-            if ($result->num_rows == 1) {
+            if ($result != null && $result->num_rows == 1) {
                 return $result->fetch_assoc();
             } else {
                 return null;
@@ -162,14 +163,7 @@
                 $results = array();
                 $i = 0;
                 while($row = $result->fetch_assoc()) {
-                    $results[$i] = array();
-                    $results[$i]["fName"] = $row["fName"];
-                    $results[$i]["lName"] = $row["lName"];
-                    $results[$i]["title"] = $row["title"];
-                    $results[$i]["category"] = $row["category"];
-                    $results[$i]["publishDate"] = $row["publishDate"];
-                    $results[$i]["numOfLikes"] = $row["numOfLikes"];
-                    $results[$i]["mainText"] = $row["mainText"]; 
+                    $results[$i] = $row;
                     $i++;
                 }
                 return $results;
@@ -178,8 +172,24 @@
             }
         }
 
+        public function deleteStory($storyTitle) {
+            $sql = "DELETE FROM Wrote WHERE title='$storyTitle';";
+
+            if ($this->_connection->query($sql) === TRUE) {
+                $sql = "DELETE FROM Stories WHERE title='$storyTitle';";
+
+                if ($this->_connection->query($sql) === TRUE) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+            } else {
+                return 1;
+            }
+        }
+
         public function createUserComment($username, $storyTitle, $comment) {
-            $sql = "INSERT INTO UserComments (comment, numOfLikes) VALUES ('$comment', 0);";
+            $sql = "INSERT INTO UserComments (comment, numOfLikes, postDate) VALUES ('$comment', 0, NOW());";
 
             $result = $this->_connection->query($sql);
             if ($result === TRUE) {
@@ -193,6 +203,24 @@
                 }
             } else {
                 return 1;
+            }
+        }
+
+        public function getUserCommentsByStory($storyTitle) {
+            $sql = "SELECT * FROM Comment INNER JOIN UserComments ON Comment.commentId = UserComments.id WHERE Comment.storyTitle='$storyTitle';";
+        
+            $result = $this->_connection->query($sql);
+
+            if ($result != null && $result->num_rows > 0) {
+                $results = array();
+                $i = 0;
+                while($row = $result->fetch_assoc()) {
+                    $results[$i] = $row;
+                    $i++;
+                }
+                return $results;
+            } else {
+                return null;
             }
         }
 

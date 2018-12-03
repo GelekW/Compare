@@ -5,15 +5,31 @@
 
     require_once("database.php");
 
+    if(isset($_SESSION["userName"])){
+        $username = $_SESSION["userName"];
+    } else {
+        header("Location: signin.php");
+        exit();
+    } 
+
     $database = Database::instance();
 
-    $article = $database->storyByTitle($_GET["title"]);
+    $title = $_GET['title'];
+
+    $article = $database->storyByTitle($title);
+
+    $commentText = isset ($_POST['commentText']) ? $_POST['commentText'] : null;
+
+    $status = null;
+    if ($commentText != null) {
+        $status = $database->createUserComment($_SESSION['userName'], $title, $commentText);
+    }
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="view-article.css">
-        <title>Home</title>
+        <title><?php echo $title; ?></title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script>
             $(document).ready(function(){
@@ -22,6 +38,15 @@
                     data =  {'action': 'signout'};
                     $.post(ajaxurl, data, function (response) {
                         window.location.href = "signin.php";
+                    });
+                });
+                $('.deleteBtn').click(function(){
+                    var ajaxurl = 'database.php';
+                    var title = "<?php echo $title; ?>";
+                    var data =  {'action': 'delete-article', 'article': title};
+                    $.post(ajaxurl, data, function (response) {
+                        alert("Deleted " + title + " Successfully!");
+                        window.location.href = "home.php";
                     });
                 });
             });
@@ -37,21 +62,51 @@
             </span>
         </span>
         <div id="container">
-
-            
-            <div id="title">
+            <h1 id="title">
                 <?php echo $article["title"]; ?>
-            </div>
-            <div>
-                <?php echo $article["userName"]; ?>
-            </div>
-            <div id="date">
+                <?php 
+                if ($article["userName"] == $_SESSION["userName"]) {
+                    //Current user
+                    echo "<button id='deleteBtn' class='deleteBtn' name='submit' href='home.php?action='delete_article'&article='$title''>Delete</button>";
+                }
+                ?>
+            </h1>
+            <hr>
+            <h4>
+                By <?php echo $article["fName"] . " " . $article["lName"] . "<br>"; ?>
                 <?php echo $article["publishDate"]; ?>
-            </div>
+            </h4>
             <div id="content">
                 <p>
                     <?php echo $article["mainText"]; ?>
                 </p>
+            </div>
+            <hr>
+            <form method="post" <?php echo "action='view-article.php?title=$title'";?> id="commentform">
+                <div id="write-user-comments">
+                    <textarea name="commentText" form="commentform"></textarea>
+                    <input type="submit" id="button" value="Post Comment">
+                </div>
+            </form>
+
+            <hr>
+
+            <div id="user-comments">
+                <?php 
+                    $comments = $database->getUserCommentsByStory($_GET["title"]);
+
+                    if ($comments != null) {
+                        foreach ($comments as $comment) {
+                            echo "<div class='user-comment'>
+                                    <strong class='user-comment-name'>".$comment["userName"]."</strong>
+                                    <div class='user-comment-post-date'>".$comment["postDate"]."</div>
+                                    <p>".$comment["comment"]."</p>
+                                </div>";
+                        }
+                    } else {
+                        echo "No comments yet!";
+                    }
+                ?>
             </div>
         </div>
     </body>
