@@ -68,6 +68,8 @@
             $sql = "INSERT INTO Users (userName, password, fName, lName) VALUES ('$userName', '$password', '$firstName', '$lastName')";
 
             if ($this->_connection->query($sql) === TRUE) {
+                header("Location: signin.php");
+                exit();
                 return 1;
             } else {
                 if (strpos($this->_connection->error, "Duplicate") !== false) {
@@ -86,8 +88,8 @@
             if ($result->num_rows == 1) {
                 session_start();
                 $_SESSION['userName'] = $username;
-                //header("Location: feed.php");
-                //exit();
+                header("Location: feed.php");
+                exit();
                 return 2;
             } else {
                 return 1;
