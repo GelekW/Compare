@@ -52,7 +52,9 @@
                         <nobr class='text'> by </nobr> 
                         <nobr class='author'>".$article["fName"]." ".$article["lName"]."</nobr>
                         <nobr class='text'>, published on </nobr>
-                        <nobr class='date'>".$article["publishDate"]."</nobr>";
+                        <nobr class='date'>".$article["publishDate"]."</nobr>
+                    </div>
+                    <br>";
             }
         ?>
     </div>
