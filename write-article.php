@@ -18,7 +18,7 @@
 
  $articleName = isset ($_POST['articleName']) ? $_POST['articleName'] : null;
  $articleText = isset ($_POST['articleText']) ? $_POST['articleText'] : null;
- $articleCategory = isset ($_POST['articleText']) ? $_POST['articleText'] : null;
+ $articleCategory = isset ($_POST['articleCategory']) ? $_POST['articleCategory'] : null;
  
  $database = Database::instance();
 
