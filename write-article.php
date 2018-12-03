@@ -53,7 +53,7 @@
         
         <form method="POST" action="/write-article.php" id="writingform">
             <p> Article Name: </p> <input type="text" name="articleName" maxlength="30">
-            <p> Article Category: </p> <input type="text" name="articleCategory">
+            <p> Article Category: </p> <input type="text" name="articleCategory" maxlength='15'>
             <p>Start Writing:</p>
             <textarea rows="20" cols="100" name="articleText" form="writingform"></textarea>
             <br><br>
