@@ -10,6 +10,13 @@
     if ($username != null && $password != null) {
         $status = $database->signin($username, $password);
     }
+
+    session_start();
+
+    if (isset($_SESSION["userName"])) {
+        header("Location: home.php");
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>

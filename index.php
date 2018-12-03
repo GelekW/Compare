@@ -13,6 +13,13 @@
     if ($fname != null && $lname != null && $username != null && $password != null) {
         $status = $database->createUser($username, $password, $fname, $lname);
     }
+
+    session_start();
+
+    if (isset($_SESSION["userName"])) {
+        header("Location: home.php");
+        exit();
+    }
 ?>
 <!DOCTYPE html>
 <html>

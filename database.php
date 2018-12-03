@@ -1,10 +1,14 @@
 <?php
+    session_start();
+
     if (isset($_POST['action'])) {
         if ($_POST['action'] == 'signout') {
+            $_SESSION["userName"] = null;
             $_SESSION = array();
             session_destroy();
+            exit;
         }
-    }    
+    }
 
     class Database {
         public static function instance() {
