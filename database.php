@@ -68,9 +68,13 @@
             $sql = "INSERT INTO Users (userName, password, fName, lName) VALUES ('$userName', '$password', '$firstName', '$lastName')";
 
             if ($this->_connection->query($sql) === TRUE) {
-                echo "New record created successfully";
+                return 1;
             } else {
-                echo "Error: " . $sql . "<br>" . $this->_connection->error;
+                if (strpos($this->_connection->error, "Duplicate") !== false) {
+                    return 2;
+                } else {
+                    return 3;
+                }
             }
         }
     
