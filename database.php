@@ -155,7 +155,7 @@
         }
 
         public function storyByDate() {
-            $sql = "SELECT * FROM Stories ORDER BY publishDate;"
+            $sql = "SELECT * FROM Stories ORDER BY publishDate;";
 
             $result = $this->_connection->query($sql);
 
