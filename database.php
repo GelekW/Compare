@@ -1,4 +1,6 @@
 <?php
+    include_once('story.php');
+
     class Database {
         private $_connection = null;
     
@@ -86,9 +88,66 @@
             if ($result->num_rows == 1) {
                 session_start();
                 $_SESSION['userName'] = $username;
-                return 1;
+                //header("Location: feed.php");
+                //exit();
+                return 2;
             } else {
-                return 0;
+                return 1;
+            }
+        }
+
+        public function storiesByUser($username) {
+            $sql = "SELECT * FROM Wrote INNER JOIN stories ON Wrote.title = stories.title WHERE userName='$username';";
+
+            $result = $this->_connection->query($sql);
+
+            if ($result->num_rows > 0) {
+                $results = array();
+                $i = 0;
+                while($row = $result->fetch_assoc()) {
+                    $results[$i] = array();
+                    $results[$i]["title"] = $row["title"];
+                    $results[$i]["category"] = $row["category"];
+                    $results[$i]["publishDate"] = $row["publishDate"];
+                    $results[$i]["numOfLikes"] = $row["numOfLikes"];
+                    $results[$i]["mainText"] = $row["mainText"]; 
+                    $i++;
+                }
+                return $results;
+            } else {
+                return null;
+            }
+        }
+
+        public function createUserComment($username, $storyTitle, $comment) {
+            $sql = "INSERT INTO UserComments (comment, numOfLikes) VALUES ('$comment', 0);";
+
+            $result = $this->_connection->query($sql);
+            if ($result === TRUE) {
+                $commentId = $this->_connection->insert_id;
+                $sql = "INSERT INTO Comment (userName, commentId, storyTitle) VALUES('$username', $commentId, '$storyTitle');";
+                $result = $this->_connection->query($sql);
+                if ($result === TRUE) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+            } else {
+                return 1;
+            }
+        }
+
+        public function publishStory($title, $category, $mainText) {
+            $sql = "INSERT INTO Stories VALUES ('$title', '$category', NOW(), 0, '$mainText');";
+
+            $result = $this->_connection->query($sql);
+
+            echo $result;
+
+            if ($result === TRUE) {
+                return 2;
+            } else {
+                return 1;
             }
         }
     

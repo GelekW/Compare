@@ -27,7 +27,7 @@
                 <div id="container">
                     <h1>Sign In</h1>
                     <p><?php
-                    if ($status == 0) {
+                    if ($status == 1) {
                         echo "Signin failed! Username or Password is incorrect";
                     } else {
                         echo "Please enter your username and password.";
