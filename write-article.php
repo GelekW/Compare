@@ -44,6 +44,7 @@
 <head>
 <meta charset= "UTF-8">
 <title>Something Dumb</title>
+<link rel="stylesheet" type="text/css" href="index.css">
 <link rel="stylesheet" type="text/css" href="write-article.css">
 </head>
 
@@ -51,15 +52,13 @@
     <div id="container">
         
         <form method="POST" action="/write-article.php" id="writingform">
-        <p> Article Name: </p> <input type="text" name="articleName" maxlength="30">
-        <p> Article Category: </p> <input type="text" name="articleCategory">
-        <input type="submit">
+            <p> Article Name: </p> <input type="text" name="articleName" maxlength="30">
+            <p> Article Category: </p> <input type="text" name="articleCategory">
+            <p>Start Writing:</p>
+            <textarea rows="20" cols="100" name="articleText" form="writingform"></textarea>
+            <br><br>
+            <input type="submit" id="button" value="Create Story">
         </form>
-
-        <p>Start Writing:</p>
-        <br>
-        <textarea name="articleText" form="writingform"></textarea>
-
     </div>
 
     <p>Feeling Trapped? <a href="/index.php">Return to Home Page</a></p>

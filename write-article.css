@@ -52,5 +52,8 @@ p{
 }
 a {
     color: #8367C7;
-    
+}
+
+#mainText {
+    width: 100%;
 }
