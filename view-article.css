@@ -1,4 +1,52 @@
 #container {
     width: 85%;
-    height: 90%;
+    color: white;
+    font-family: "Segoe UI", Times, serif;
+    border-radius: 10px;
+    padding: 8px;
+    margin: auto;
+    text-align: center;
+}
+
+#logo {
+    display: block;
+    margin-left: 29%;
+    margin-right: auto;
+    width: 50%;
+}
+
+#signout {
+    background-color: #8367C7;
+    border: none;
+    color: white;
+    padding: 7px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+a {
+    color: #8367C7; 
+}
+
+body {
+    background-color: 	#2c2f33;
+}
+
+#top {
+    color: white;
+    font-family: "Segoe UI", Times, serif;
+}
+
+#logosmall {
+    height: auto;
+    max-width: 25%;
+}
+
+#account {
+    float: right;
 }
