@@ -143,8 +143,7 @@
         }
 
         public function storyByTitle($title) {
-            $sql = "SELECT * FROM Stories WHERE title='$title';";
-
+            $sql = "SELECT * FROM Wrote INNER JOIN Stories ON Wrote.title = stories.title WHERE Stories.title='$title';";
             $result = $this->_connection->query($sql);
 
             if ($result->num_rows == 1) {
@@ -155,7 +154,7 @@
         }
 
         public function storyByDate() {
-            $sql = "SELECT * FROM Stories ORDER BY publishDate;";
+            $sql = "SELECT * FROM Wrote INNER JOIN Stories ON Wrote.title = stories.title ORDER BY publishDate;";
 
             $result = $this->_connection->query($sql);
 
@@ -164,6 +163,8 @@
                 $i = 0;
                 while($row = $result->fetch_assoc()) {
                     $results[$i] = array();
+                    $results[$i]["fName"] = $row["fName"];
+                    $results[$i]["lName"] = $row["lName"];
                     $results[$i]["title"] = $row["title"];
                     $results[$i]["category"] = $row["category"];
                     $results[$i]["publishDate"] = $row["publishDate"];
