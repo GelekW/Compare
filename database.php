@@ -1,4 +1,11 @@
 <?php
+    if (isset($_POST['action'])) {
+        if ($_POST['action'] == 'signout') {
+            $_SESSION = array();
+            session_destroy();
+        }
+    }    
+
     class Database {
         public static function instance() {
             static $db = null;
@@ -96,7 +103,8 @@
             if ($result->num_rows == 1) {
                 session_start();
                 $_SESSION['userName'] = $username;
-                header("Location: feed.php");
+                $_SESSION['fName'] = $firstName;
+                header("Location: home.php");
                 exit();
                 return 2;
             } else {
@@ -128,7 +136,7 @@
         }
 
         public function storyByTitle($title) {
-            $sql = "SELECT * FROM Stories WHERE title='$title';"
+            $sql = "SELECT * FROM Stories WHERE title='$title';";
 
             $result = $this->_connection->query($sql);
 

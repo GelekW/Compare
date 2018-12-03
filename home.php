@@ -1,15 +1,30 @@
+<?php 
+    session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="index.css">
     <title>Home</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.signout').click(function(){
+                var ajaxurl = 'database.php',
+                data =  {'action': 'signout'};
+                $.post(ajaxurl, data, function (response) {
+                    window.location.href = "signin.php";
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
         <span id="top">
             <img src=logosmall.png alt="logo" id="logosmall">
             <span id="account">            
-                <p> Hello, Gelek  <button type="button" class="signout" id="signout" name="submit">Sign Out</button></p>
+                <p> Hello, <?php echo $_SESSION["fName"]; ?>  <button type="button" class="signout" id="signout" name="submit">Sign Out</button></p>
                 <button type="button" id="signout" name="write">Create New Article</button>
 
             </span>
