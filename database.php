@@ -1,12 +1,13 @@
 <?php
-    session_start();
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
 
     if (isset($_POST['action'])) {
         if ($_POST['action'] == 'signout') {
             $_SESSION["userName"] = null;
             $_SESSION = array();
             session_destroy();
-            exit;
         }
     }
 
@@ -105,9 +106,11 @@
             $result = $this->_connection->query($sql);
 
             if ($result->num_rows == 1) {
-                session_start();
+                if (session_status() == PHP_SESSION_NONE) {
+                    session_start();
+                }
                 $_SESSION['userName'] = $username;
-                $_SESSION['fName'] = $firstName;
+                $_SESSION['fName'] = $result->fetch_assoc()["fName"];
                 header("Location: home.php");
                 exit();
                 return 2;

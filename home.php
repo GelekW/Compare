@@ -1,5 +1,7 @@
 <?php 
-    session_start();
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -24,8 +26,10 @@
         <span id="top">
             <img src=logosmall.png alt="logo" id="logosmall">
             <span id="account">            
-                <p> Hello, <?php echo $_SESSION["fName"]; ?>  <button type="button" class="signout" id="signout" name="submit">Sign Out</button></p>
-                <button type="button" id="signout" name="write">Create New Article</button>
+                <p> Hello, <?php 
+                echo $_SESSION['fName'] . " "; 
+                ?>  <button type="button" class="signout" id="signout" name="submit">Sign Out</button></p>
+                <a id="signout" href="write-article.php">Create New Article</a>
 
             </span>
         </span> 
