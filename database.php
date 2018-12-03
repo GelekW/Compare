@@ -154,6 +154,29 @@
             }
         }
 
+        public function storyByDate() {
+            $sql = "SELECT * FROM Stories ORDER BY publishDate;"
+
+            $result = $this->_connection->query($sql);
+
+            if ($result->num_rows > 0) {
+                $results = array();
+                $i = 0;
+                while($row = $result->fetch_assoc()) {
+                    $results[$i] = array();
+                    $results[$i]["title"] = $row["title"];
+                    $results[$i]["category"] = $row["category"];
+                    $results[$i]["publishDate"] = $row["publishDate"];
+                    $results[$i]["numOfLikes"] = $row["numOfLikes"];
+                    $results[$i]["mainText"] = $row["mainText"]; 
+                    $i++;
+                }
+                return $results;
+            } else {
+                return null;
+            }
+        }
+
         public function createUserComment($username, $storyTitle, $comment) {
             $sql = "INSERT INTO UserComments (comment, numOfLikes) VALUES ('$comment', 0);";
 
