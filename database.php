@@ -154,7 +154,7 @@
         }
 
         public function storyByDate() {
-            $sql = "SELECT * FROM Wrote INNER JOIN Stories ON Wrote.title = stories.title ORDER BY publishDate;";
+            $sql = "SELECT * FROM Wrote INNER JOIN Stories ON Wrote.title = Stories.title INNER JOIN Users ON Wrote.userName = Users.userName ORDER BY publishDate;";
 
             $result = $this->_connection->query($sql);
 
