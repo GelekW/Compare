@@ -32,7 +32,7 @@
     else if($status == 2){
         echo "Article Success";
         sleep(0.5);
-        header("Location: feed.php");
+        header("Location: home.php");
         exit();
     }
  }
