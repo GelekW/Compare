@@ -121,3 +121,8 @@ a {
     line-height: 70px;
     vertical-align: middle;
 }
+
+#no-stories {
+    color: white;
+    text-align: center;
+}

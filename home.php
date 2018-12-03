@@ -33,26 +33,24 @@
             </span>
         </span>
     <div class="container">
-        <!-- <div class="articlebox">
-                <p class="likes">likes</p>
-                <a class="articletitle" href="view-article.php">I am an article title blah blah</a> 
-                <nobr class="text"> by </nobr> 
-                <nobr class="author">I am an author</nobr>
-                <nobr class="text">, published on </nobr>
-                <nobr class="date">00/00/0000</nobr>
-        </div> -->
         <?php
             $articles = $database->storyByDate();
-            foreach($articles as $article){
-                echo "<div class='articlebox'>
-                        <p class='likes'>".$article["category"]."</p>
-                        <a class='articletitle' href='view-article.php?title=".$article["title"]."'>".$article["title"]."</a> 
-                        <nobr class='text'> by </nobr> 
-                        <nobr class='author'>".$article["fName"]." ".$article["lName"]."</nobr>
-                        <nobr class='text'>, published on </nobr>
-                        <nobr class='date'>".$article["publishDate"]."</nobr>
-                    </div>
-                    <br>";
+            if ($articles != null) {
+                foreach($articles as $article){
+                    echo "<div class='articlebox'>
+                            <p class='likes'>".$article["category"]."</p>
+                            <a class='articletitle' href='view-article.php?title=".$article["title"]."'>".$article["title"]."</a> 
+                            <nobr class='text'> by </nobr> 
+                            <nobr class='author'>".$article["fName"]." ".$article["lName"]."</nobr>
+                            <nobr class='text'>, published on </nobr>
+                            <nobr class='date'>".$article["publishDate"]."</nobr>
+                        </div>
+                        <br>";
+                }
+            } else {
+                echo "<div id='no-stories'>
+                        No Stories found! Why don't you <a href='write-article.php'>post</a> one!
+                    </div>";
             }
         ?>
     </div>
