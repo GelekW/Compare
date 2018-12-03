@@ -1,6 +1,4 @@
 <?php
-    include_once('story.php');
-
     class Database {
         private $_connection = null;
     
