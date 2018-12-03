@@ -24,6 +24,11 @@
     if ($commentText != null) {
         $status = $database->createUserComment($_SESSION['userName'], $title, $commentText);
     }
+
+    $publisherName = $database->canEndorse($_SESSION['userName']);
+    $isEndorsed = $database->isEndorsed($publisherName, $title);
+
+    $endorsement = $database->getEndorsement($title);
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,7 +45,7 @@
                         window.location.href = "signin.php";
                     });
                 });
-                $('.deleteBtn').click(function(){
+                $('#deleteBtn').click(function(){
                     var ajaxurl = 'database.php';
                     var title = "<?php echo $title; ?>";
                     var data =  {'action': 'delete-article', 'article': title};
@@ -49,7 +54,39 @@
                         window.location.href = "home.php";
                     });
                 });
+                $('#endorseBtn').click(function(){
+                    var ajaxurl = 'database.php';
+                    var title = "<?php echo $title; ?>";
+                    var publisherName = "<?php echo $publisherName; ?>";
+                    var data = {'action': 'endorse', 'publisherName': publisherName, 'article': title};
+                    $.post(ajaxurl, data, function (response) {
+                        alert("Endorsed " + title + " Successfully!");
+                        window.location.href = `view-article.php?title=${title}`;
+                    });
+                });
+                $('#unendorseBtn').click(function(){
+                    var ajaxurl = 'database.php';
+                    var title = "<?php echo $title; ?>";
+                    var publisherName = "<?php echo $publisherName; ?>";
+                    var data = {'action': 'unendorse', 'publisherName': publisherName, 'article': title};
+                    $.post(ajaxurl, data, function (response) {
+                        alert("Un-Endorsed " + title + " Successfully!");
+                        window.location.href = `view-article.php?title=${title}`;
+                    });
+                });
             });
+
+            function deleteComment(commentId) {
+                var title = "<?php echo $title; ?>";
+                var ajaxurl = 'database.php';
+                var data = {'action': 'delete-comment', 'commendId': commentId};
+                $.post(ajaxurl, data, function (response) {
+                    alert("Deleted Successfully!");
+                    alert(response);
+                    window.location.href = `view-article.php?title=${title}`;
+                    
+                });
+            }
         </script>
     </head>
     <body>
@@ -67,7 +104,15 @@
                 <?php 
                 if ($article["userName"] == $_SESSION["userName"]) {
                     //Current user
-                    echo "<button id='deleteBtn' class='deleteBtn' name='submit' href='home.php?action='delete_article'&article='$title''>Delete</button>";
+                    echo "<button id='deleteBtn' class='deleteBtn' name='submit'>Delete</button>";
+                }
+
+                if ($publisherName != null) {
+                    if (!$isEndorsed && $endorsement == null) {
+                        echo "<button id='endorseBtn' name='submit'>Endorse</button>";
+                    } else {
+                        echo "<button id='unendorseBtn' name='submit'>Un-Endorse</button>";
+                    }
                 }
                 ?>
             </h1>
@@ -75,6 +120,9 @@
             <h4>
                 By <?php echo $article["fName"] . " " . $article["lName"] . "<br>"; ?>
                 <?php echo $article["publishDate"]; ?>
+                <?php if ($endorsement != null) {
+                    echo "<br>Endorsed by " . $endorsement["publicationName"];
+                }?>
             </h4>
             <div id="content">
                 <p>
@@ -97,11 +145,16 @@
 
                     if ($comments != null) {
                         foreach ($comments as $comment) {
-                            echo "<div class='user-comment'>
-                                    <strong class='user-comment-name'>".$comment["userName"]."</strong>
-                                    <div class='user-comment-post-date'>".$comment["postDate"]."</div>
-                                    <p>".$comment["comment"]."</p>
-                                </div>";
+                            echo "<div class='user-comment'>";
+                            echo "<strong class='user-comment-name'>".$comment["userName"]."</strong>";
+                            if ($_SESSION["userName"] == $comment["userName"]) {
+                                echo "<button class=delete-comment-btn onclick='deleteComment(".$comment['id'].")'>Delete</button>";
+                            }        
+                                    echo "<div class='user-comment-post-date'>".$comment["postDate"]."</div>";
+                                    
+                                    echo "<p>".$comment["comment"]."</p>";
+                                    
+                            echo "</div>";
                         }
                     } else {
                         echo "No comments yet!";

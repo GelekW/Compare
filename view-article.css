@@ -114,10 +114,10 @@ hr {
 .user-comment-post-date {
     color: #8367C7;
     width: 20%;
-    float: right;
     font-size: 12px;
     text-align: right;
     margin-top: 1px;
+    float: right;
 }
 
 #deleteBtn {
@@ -135,4 +135,47 @@ hr {
 
 a:hover, a:visited, a:link, a:active {
     text-decoration: none;
+}
+
+#endorseBtn {
+    background-color: #8367C7;
+    color: white;
+    border-radius: 10px;
+    padding: 2px;
+    font-size: 16px;
+    float: right;
+    padding-left: 15px;
+    padding-right: 15px;
+    border: none;
+    box-shadow: none;
+}
+
+#unendorseBtn {
+    background-color: white;
+    color: #8367C7;
+    border-radius: 10px;
+    padding: 2px;
+    font-size: 16px;
+    float: right;
+    padding-left: 15px;
+    padding-right: 15px;
+    border: none;
+    box-shadow: none;
+}
+
+.right {
+    float: right;
+}
+
+.delete-comment-btn {
+    background-color: red;
+    color: white;
+    border-radius: 10px;
+    padding: 2px;
+    font-size: 16px;
+    float: right;
+    padding-left: 15px;
+    padding-right: 15px;
+    border: none;
+    box-shadow: none;
 }

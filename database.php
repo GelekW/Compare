@@ -13,6 +13,23 @@
             $db = Database::instance();
 
             $db->deleteStory($article);
+        } else if ($_POST['action'] == 'endorse' && isset($_POST['article']) && isset($_POST['publisherName'])) {
+            $publisherName = $_POST['publisherName'];
+            $article = $_POST['article'];
+            $db = Database::instance();
+
+            $db->endorse($publisherName, $article);
+        } else if ($_POST['action'] == 'unendorse' && isset($_POST['article']) && isset($_POST['publisherName'])) {
+            $publisherName = $_POST['publisherName'];
+            $article = $_POST['article'];
+            $db = Database::instance();
+
+            $db->unendorse($publisherName, $article);
+        } else if($_POST['action'] == 'delete-comment' && isset($_POST['commentId'])){
+            $commentId = $_POST['commentId'];
+            $db = Database::instance();
+
+            echo $db->deleteUserComment($commentId);
         }
     }
 
@@ -206,6 +223,18 @@
             }
         }
 
+        public function deleteUserComment($commendId) {
+            $sql = "DELETE FROM Comment WHERE commentId='$commentId'";
+
+            if ($this->_connection->query($sql) === TRUE) {
+                $sql = "DELETE FROM UserComments WHERE id='$commentId'";
+                if ($this->_connection->query($sql) === TRUE) {
+                    return 2;
+                }
+            }
+            return 1;
+        }
+
         public function getUserCommentsByStory($storyTitle) {
             $sql = "SELECT * FROM Comment INNER JOIN UserComments ON Comment.commentId = UserComments.id WHERE Comment.storyTitle='$storyTitle';";
         
@@ -240,6 +269,62 @@
             } else {
                 return 1;
             }
+        }
+
+        public function canEndorse($userName) {
+            $sql = "SELECT * FROM Edit WHERE userName='$userName';";
+
+            $result = $this->_connection->query($sql);
+
+            if ($result != null && $result->num_rows > 0) {
+                return $result->fetch_assoc()["publisherName"];
+            }
+            return null;
+        }
+
+        public function endorse($storyTitle, $publisherName) {
+            $sql = "INSERT INTO Publish VALUES('$storyTitle', '$publisherName');";
+
+            $result = $this->_connection->query($sql);
+
+            if ($result === TRUE) {
+                return 2;
+            } else {
+                return 1;
+            }
+        }
+
+        public function unendorse($storyTitle) {
+            $sql = "DELETE FROM Publish WHERE storyTitle='$storyTitle';";
+
+            if ($this->_connection->query($sql) === TRUE) {
+                return 2;
+            } else {
+                echo $this->_connection->error;
+                return 1;
+            }
+        }
+
+        public function getEndorsement($title) {
+            $sql = "SELECT * FROM Publish WHERE storyTitle='$title'";
+
+            $result = $this->_connection->query($sql);
+
+            if ($result != null && $result->num_rows > 0) {
+                return $result->fetch_assoc();
+            }
+            return null;
+        }
+
+        public function isEndorsed($publisherName, $storyTitle) {
+            $sql = "SELECT * FROM Publish WHERE publicationName='$publisherName' AND storyTitle='$storyTitle';";
+
+            $result = $this->_connection->query($sql);
+
+            if ($result != null && $result->num_rows > 0) {
+                return true;
+            }
+            return false;
         }
     
         public function __destruct() {
