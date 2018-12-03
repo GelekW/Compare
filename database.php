@@ -127,6 +127,18 @@
             }
         }
 
+        public function storyByTitle($title) {
+            $sql = "SELECT * FROM Stories WHERE title='$title';"
+
+            $result = $this->_connection->query($sql);
+
+            if ($result->num_rows == 1) {
+                return $result->fetch_assoc();
+            } else {
+                return null;
+            }
+        }
+
         public function createUserComment($username, $storyTitle, $comment) {
             $sql = "INSERT INTO UserComments (comment, numOfLikes) VALUES ('$comment', 0);";
 
