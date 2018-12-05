@@ -79,7 +79,7 @@
             function deleteComment(commentId) {
                 var title = "<?php echo $title; ?>";
                 var ajaxurl = 'database.php';
-                var data = {'action': 'delete-comment', 'commendId': commentId};
+                var data = {'action': 'delete-comment', 'commentId': commentId};
                 $.post(ajaxurl, data, function (response) {
                     alert("Deleted Successfully!");
                     alert(response);

@@ -24,12 +24,12 @@
             $article = $_POST['article'];
             $db = Database::instance();
 
-            $db->unendorse($publisherName, $article);
+            $db->unendorse($article);
         } else if($_POST['action'] == 'delete-comment' && isset($_POST['commentId'])){
             $commentId = $_POST['commentId'];
             $db = Database::instance();
 
-            echo $db->deleteUserComment($commentId);
+            $db->deleteUserComment($commentId);
         }
     }
 
@@ -190,6 +190,26 @@
         }
 
         public function deleteStory($storyTitle) {
+            $sql = "SELECT * FROM Comment WHERE storyTitle='$storyTitle';";
+
+            $result = $this->_connection->query($sql);
+
+            if ($result != null && $result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $this->deleteUserComment($row["commentId"]);
+                }
+            }
+
+            $sql = "SELECT * FROM Publish WHERE storyTitle='$storyTitle';";
+
+            $result = $this->_connection->query($sql);
+
+            if ($result != null && $result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $this->unendorse($row["storyTitle"]);
+                }
+            }
+
             $sql = "DELETE FROM Wrote WHERE title='$storyTitle';";
 
             if ($this->_connection->query($sql) === TRUE) {
@@ -223,11 +243,11 @@
             }
         }
 
-        public function deleteUserComment($commendId) {
-            $sql = "DELETE FROM Comment WHERE commentId='$commentId'";
+        public function deleteUserComment($commentId) {
+            $sql = "DELETE FROM Comment WHERE commentId='$commentId';";
 
             if ($this->_connection->query($sql) === TRUE) {
-                $sql = "DELETE FROM UserComments WHERE id='$commentId'";
+                $sql = "DELETE FROM UserComments WHERE id='$commentId';";
                 if ($this->_connection->query($sql) === TRUE) {
                     return 2;
                 }
@@ -300,7 +320,6 @@
             if ($this->_connection->query($sql) === TRUE) {
                 return 2;
             } else {
-                echo $this->_connection->error;
                 return 1;
             }
         }
